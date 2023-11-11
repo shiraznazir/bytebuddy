@@ -6,7 +6,7 @@ import { toast } from "react-hot-toast";
 
 const Login = () => {
   const auth = useAuth();
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const email = formData.get("email") as string;
@@ -14,7 +14,11 @@ const Login = () => {
     try {
       toast.loading("Signing In Successfully", { id: "login" });
       await auth?.login(email, password);
-    } catch (error) {}
+      toast.success("Signed In Succesfully", { id: "login" });
+    } catch (error) {
+      console.log("Error ", error);
+      toast.error("Signing In Failed", { id: "login" });
+    }
     console.log("Data ", email, password);
   };
   return (
