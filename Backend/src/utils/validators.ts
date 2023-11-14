@@ -28,10 +28,13 @@ export const signupValidator = [
 ];
 
 export const loginValidator = [
-    body("email").trim().isEmail().withMessage("Email is required"),
-    body("password")
-      .trim()
-      .isLength({ min: 6 })
-      .withMessage("Password should contain atleast 6 character"),
-  ];
-  
+  body("email").trim().isEmail().withMessage("Email is required"),
+  body("password")
+    .trim()
+    .isLength({ min: 6 })
+    .withMessage("Password should contain atleast 6 character"),
+];
+
+export const chatCompletionValidator = [
+  body("message").notEmpty().withMessage("Message  is required"),
+];

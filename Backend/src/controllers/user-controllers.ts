@@ -95,38 +95,22 @@ export const userLogin = async (
   }
 };
 
-
 export const verifyUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findById(res.locals.jwtData.id);
     if (!user) {
-      return res.status(401).send("User is not registered");
+      return res
+        .status(401)
+        .send("User is not registered OR Token malfunctioned");
     }
-    const isPasswordCorrect = await compare(password, user.password);
-    if (!isPasswordCorrect) {
-      return res.status(403).send("Incorrect Password");
+    console.log(user._id.toString() + " " + res.locals.jwtData.id);
+    if (user._id.toString() !== res.locals.jwtData.id) {
+      return res.status(401).send("Permission didn't match");
     }
-    res.clearCookie(COOKIE_NAME, {
-      path: "/",
-      domain: "localhost",
-      httpOnly: true,
-      signed: true,
-    });
-    const token = createToken(user._id.toString(), user.email, "7d");
-    const expires = new Date();
-    expires.setDate(expires.getDate() + 7);
-    res.cookie(COOKIE_NAME, token, {
-      path: "/",
-      domain: "localhost",
-      expires,
-      httpOnly: true,
-      signed: true,
-    });
     return res
       .status(200)
       .json({ message: "OK", name: user.name, email: user.email });
