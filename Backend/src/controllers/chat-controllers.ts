@@ -29,7 +29,8 @@ export const generateChatCompletion = async (
     console.log("try block 3 ", chats);
     user.chats.push({ content: message, role: "user" });
     // send all chats with new one to openAI API
-    const openaiConfig = configureOpenAI(); // Rename config to openaiConfig
+    const openaiConfig = configureOpenAI();
+    // Rename config to openaiConfig
     const openai = new OpenAIApi(openaiConfig);
 
     // get the latest response
@@ -38,7 +39,7 @@ export const generateChatCompletion = async (
       model: "gpt-3.5-turbo",
       messages: chats,
     });
-    // console.log("OOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKKK");    
+    console.log("OOOOOOOOOOOOOOOOKKKKKKKKKKKKKKKKK");
     console.log("Check ", chatResponse);
     user.chats.push(chatResponse.data.choices[0].message);
     await user.save();
